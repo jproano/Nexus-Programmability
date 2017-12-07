@@ -1,0 +1,39 @@
+---
+# This routine executes a "copy running-config startup-config" in a NX network device
+# 
+# The Module is executed along with an inventory file with a [nxos] header and IPs or HN or FQDNs under it,
+# the example file. The inventory file doesnt have to have an extension but wont break if one is there.
+#
+# The Playbook is executed with two runtime variables passed to it: 
+# ansible-playbook -i device-inventory NXOS-ansible-copyrunstart.yml --extra-vars="username=admin password=juju"
+# Note that variables passed at run time are seperated with spaces
+#
+- name: Ansible Save Configuration Routine for NX-OS
+  # Look for hosts in the [nxos] container of the inventory file
+  hosts: nxos
+  # Use the local Ansible system
+  connection: local
+  # Dont bother with fact computation about remote entities wont need that for the simple plays being run
+  gather_facts: no
+
+  # Use Username and Password provided at runtime combined with the hostname list to run in the task
+  # there are alot of ways to pass username and password creds and hosts. But this way allows for the use
+  # of an inventory file. This could easily be replaced with "{{ hostname }}" and a third variable can be
+  # used at runtime
+  vars:
+    nxos_provider:
+      username: "{{ username }}"
+      password: "{{ password }}"
+      host: "{{ inventory_hostname }}"
+
+  # The nxos_config module is used to run a save on the running config this task will be performed on the 
+  # host(s) provided in the inventory file combined with the credentials provided at runtime. The save_when
+  # command is used as that is the preferred command in the module and "always" executes an arbitrary "copy
+  # run start" command on the switch. An "modified" save_when would check if the run is different then do a
+  # "copy run start" only if needed. This is useful if it needs to be deterministic which configs are out
+  # of sync (changed flag will be 0 if no copy run start was executed).
+  tasks:
+  - name: Save the Running Configuration
+    nxos_config: 
+      provider: "{{ nxos_provider }}"
+      save_when: always

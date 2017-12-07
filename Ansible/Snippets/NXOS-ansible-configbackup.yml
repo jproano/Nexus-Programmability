@@ -1,0 +1,35 @@
+---
+# This routine executes a backup of the running configuration of a network device
+# 
+# The Module is executed along with an inventory file with a [nxos] header and IPs or HN or FQDNs under it,
+# the example file. The inventory file doesnt have to have an extension but wont break if one is there.
+#
+# The Playbook is executed with two runtime variables passed to it: 
+# ansible-playbook -i device-inventory NXOS-ansible-configbackup.yml --extra-vars="username=admin password=juju"
+# Note that variables passed at run time are seperated with spaces
+#
+- name: Ansible Save Configuration Routine for NX-OS
+  # Look for hosts in the [nxos] container of the inventory file
+  hosts: nxos
+  # Use the local Ansible system
+  connection: local
+  # Dont bother with fact computation about remote entities wont need that for the simple plays being run
+  gather_facts: no
+
+  # Use Username and Password provided at runtime combined with the hostname list to run in the task
+  # there are alot of ways to pass username and password creds and hosts. But this way allows for the use
+  # of an inventory file. This could easily be replaced with "{{ hostname }}" and a third variable can be
+  # used at runtime
+  vars:
+    nxos_provider:
+      username: "{{ username }}"
+      password: "{{ password }}"
+      host: "{{ inventory_hostname }}"
+
+  # Use the nxos_config module to run a backup of the running config this task will be performed on the 
+  # host(s) provided in the inventory file combined with the credentials provided at runtime. 
+  tasks:
+  - name: Backup the Running Configuration
+    nxos_config: 
+      provider: "{{ nxos_provider }}"
+      backup: yes

@@ -1,0 +1,2 @@
+[nxos]
+172.16.235.214 ansible_network_os=nxos

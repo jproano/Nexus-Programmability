@@ -1,0 +1,47 @@
+---
+# This routine executes provisioning of a single interface
+#
+# The Playbook is executed with all runtime variables passed to it, including the inventory: 
+# ansible-playbook -i "10.1.1.1," NXOS-ansible-interfaceaccess.yml --extra-vars="username=admin password=juju interface=Ethernet1/1 vlan=20 description='Configured by Ansible'"
+#
+# Note that the inventory is passed within "" and includes a trailing comma. The trailing comma is important
+# as it differentiates a list of devices or hostname vs an inventory file. Also note the description where
+# spaces can be processed within a variable
+#
+- name: Ansible Configure Access Interface Routine for NX-OS
+  # Process all hosts provided in the inventory (list provided at runtime)
+  hosts: all
+  # Use the local Ansible system
+  connection: local
+  # Dont bother with fact computation about remote entities wont need that for the simple plays being run
+  gather_facts: no
+
+  # Use Username and Password provided at runtime combined with the hostname list (also passed as a variable)
+  vars:
+    nxos_provider:
+      username: "{{ username }}"
+      password: "{{ password }}"
+      host: "{{ inventory_hostname }}"
+ 
+  # The Configuration task is broken down into two tasks. The Physical Interface configuration task where
+  # the NX device is connected and the interface (passed from the interface variable) is configured as a 
+  # switchport, and no shut. The secon task puts uses the switchport module to put the port into mode access
+  # and assign the vlan to the access port.
+
+  tasks:
+  - name: Configure NX Access Interface for L2
+    nxos_interface: 
+      provider: "{{ nxos_provider }}"
+      interface: "{{ interface }}"
+      description: "{{ description }}"
+      mode: layer2 
+      admin_state: up
+
+  - name: Assign VLAN to Access Interface  
+    nxos_switchport:
+      provider: "{{ nxos_provider }}"
+      interface: "{{ interface }}"
+      mode: access
+      access_vlan: "{{ vlan }}"
+
+

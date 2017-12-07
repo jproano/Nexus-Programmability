@@ -1,0 +1,34 @@
+---
+# This routine executes a "vlan {VLAN_ID} ; name {VLAN_NAME}" on an NX network device
+# 
+# The Module is executed along with an inventory file with a [nxos] header with IPs, HostNames or FQDNs under it.
+# The inventory file doesnt have to have an extension but wont break if one is there.
+#
+# The Playbook is executed with 4 runtime variables passed to it: 
+# ansible-playbook -i device-inventory NXOS-ansible-vlancreate.yml --extra-vars="username=admin password=juju vlan_id=21 vlan_id_name=Server_21Net"
+# Note that variables passed at run time are seperated with spaces
+#
+- name: Ansible Configure VLAN Routine for NX-OS
+  # Look for hosts in the [nxos] container of the inventory file
+  hosts: nxos
+  # Use the local Ansible system
+  connection: local
+  # Dont bother with fact computation about remote entities wont need that for the simple plays being run
+  gather_facts: no
+
+  # Use Username and Password provided at runtime combined with the hostname list to run in the task
+  # there are alot of ways to pass username and password creds and hosts. But this way allows for the use
+  # of an inventory file. 
+  vars:
+    nxos_provider:
+      username: "{{ username }}"
+      password: "{{ password }}"
+      host: "{{ inventory_hostname }}"
+
+  # The nxos_vlan module is used to create a VLAN with the number and name passed at runtime 
+  tasks:
+  - name: Configure VLAN
+    nxos_vlan:
+      provider: "{{ nxos_provider }}"
+      vlan_id: "{{ vlan_id }}"
+      name: "{{ vlan_id_name }}"

@@ -72,12 +72,12 @@ A file will be created with the hostname-<year><month><day>-<hour><minute><secon
 This program is a combination of 3 functions that ultimately will configure an Ethernet port as a access switchport on a designated vlan. Configuration CLI equivalent to:
 
 interface Eth1/1
-  switchport
-  switchport mode access
-  switchport access vlan NN
-  spanning-tree port type edge
-  spanning-tree bpduguard enable
-  no shutdown
+switchport
+switchport mode access
+switchport access vlan NN
+spanning-tree port type edge
+spanning-tree bpduguard enable
+no shutdown
 
 Prior to configuring the interface the program will check for the existence of the desired VLAN in a function, as well as if the port is in an Admin Down "shutdown" state. This state could be modified to reflect the operational state vs admin state. But is designed to show a programatic check of the interface to ensure it a candidate to be provisioned.
 

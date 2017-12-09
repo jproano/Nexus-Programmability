@@ -1,0 +1,870 @@
+{
+	"variables": [],
+	"info": {
+		"name": "NX-OS REST",
+		"_postman_id": "90b41c9c-8ab0-2f44-b00d-904c0b03aee0",
+		"description": "RESTCONF",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "YANG Get Operations - AKA the Show commands.",
+			"description": "",
+			"item": [
+				{
+					"name": "NX Yang - Show Physical Interface - JSON Output",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"tests[\"Response time is acceptable\"] = responseTime < 2000; // milliseconds",
+									"var data = JSON.parse(responseBody);",
+									"tests[\"Admin State Check\"] = data[\"PhysIf-list\"][0].adminSt === \"up\";",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<Vlan-list>\n\t<id>24</id>\n\t<priority>4096</priority>\n</Vlan-list>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/intf-items/phys-items/PhysIf-list=eth1%2F1",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Show Running Database - XML Output",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Show VLan - JSON Output",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"tests[\"Response time is acceptable\"] = responseTime < 2000; // milliseconds",
+									"var data = JSON.parse(responseBody);",
+									"tests[\"Admin State Check\"] = data[\"BD-list\"][0].adminSt === \"active\";",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<Vlan-list>\n\t<id>24</id>\n\t<priority>4096</priority>\n</Vlan-list>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/bd-items/bd-items/BD-list=vlan-20",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Show Enabled Features - XML Output",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/fm-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Show Logical Inteface Loopback - JSON Output",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+json"
+							}
+						],
+						"body": {},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/intf-items/lb-items/LbRtdIf-list=lo0",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Show IPv4 Info for - Loopback0 - XML Output",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/ipv4-items/inst-items/dom-items/Dom-list=default/if-items/If-list=lo0",
+						"description": "This also implies IPv4 information in the default VRF - (Dom-list=default) if the interface is in a non default VRF place the correct VRF tag in the Dom-list field."
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Show Run | sec OSPF - XML Output",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/ospf-items/",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Show Run | sec BGP - XML Output",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/bgp-items/",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Show Run | sec PIM - XML Output",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/pim-items/",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Show Run | sec vrf - XML Output",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/inst-items/",
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "YANG POST/PUT/PATCH Operations - Configuration Modifications",
+			"description": "",
+			"item": [
+				{
+					"name": "NX Yang - Create User - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<User-list>\n    <name>newuser</name>\n    <pwd>newpassword</pwd>\n    <pwdEncryptType>0</pwdEncryptType>\n    <userdomain-items>\n        <UserDomain-list>\n            <name>all</name>\n            <role-items>\n                <UserRole-list>\n                    <name>network-admin</name>\n                </UserRole-list>\n            </role-items>\n        </UserDomain-list>\n    </userdomain-items>\n</User-list>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/userext-items/user-items",
+						"description": "CLI Equivlant to: username newuser password newpassword role network-admin"
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Create VLAN - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<BD-list>\n\t<fabEncap>vlan-30</fabEncap>\n\t<name>Server_Net30</name>\n\t<mode>CE</mode>\n</BD-list>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/bd-items/bd-items",
+						"description": "Create VLAN 30 and Name it Server_Net30"
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Enable Feature interface-vlan - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<ifvlan-items>\n    <adminSt>enabled</adminSt>\n</ifvlan-items>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/fm-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Enable Feature bgp - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<bgp-items>\n    <adminSt>enabled</adminSt>\n</bgp-items>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/fm-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Enable Feature ospf - JSON Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"ospf-items\": {\n\t\t\"adminSt\" : \"enabled\"\n\t}\n}"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/fm-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Enable Feature pim - JSON Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"pim-items\": {\n\t\t\"adminSt\" : \"enabled\"\n\t}\n}"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/fm-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Enable Features for VXLAN EVPN - JSON Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"vnsegment-items\": {\n\t\t\"adminSt\" : \"enabled\"\n\t},\n\t\"evpn-items\": {\n\t\t\"adminSt\" : \"enabled\"\n\t},\n\t\"nvo-items\": {\n\t\t\"adminSt\" : \"enabled\"\n\t}\n}"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/fm-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Enable Features for VXLAN EVPN - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<vnsegment-items>\n    <adminSt>enabled</adminSt>\n</vnsegment-items>\n<evpn-items>\n    <adminSt>enabled</adminSt>\n</evpn-items>\n<nvo-items>\n    <adminSt>enabled</adminSt>\n</nvo-items>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/fm-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Create Loopback Interface - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<LbRtdIf-list>\n    <id>lo0</id>\n    <adminSt>up</adminSt>\n</LbRtdIf-list>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/intf-items/lb-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Create SVI Interface - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<If-list>\n    <id>vlan100</id>\n    <adminSt>up</adminSt>\n</If-list>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/intf-items/svi-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Add IPv4 Address to Interface - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<If-list>\n    <id>lo0</id>\n    <addr-items>\n        <Addr-list>\n            <addr>192.168.1.1/24</addr>\n        </Addr-list>\n    </addr-items>\n</If-list>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/ipv4-items/inst-items/dom-items/Dom-list=default/if-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Configured Physical Access Interface - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<PhysIf-list>\n    <id>eth1/2</id>\n    <layer>Layer2</layer>\n    <mode>access</mode>\n    <accessVlan>vlan-30</accessVlan>\n    <adminSt>up</adminSt>\n    <descr>Configured by Postman</descr>\n</PhysIf-list>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/intf-items/phys-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Configure Physical Access Interface & STP - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<intf-items>\n    <phys-items>\n        <PhysIf-list>\n            <id>eth1/2</id>\n            <layer>Layer2</layer>\n            <mode>access</mode>\n            <accessVlan>vlan-30</accessVlan>\n            <adminSt>up</adminSt>\n        </PhysIf-list>\n    </phys-items>\n</intf-items>\n<stp-items>\n    <inst-items>\n        <if-items>\n            <If-list>\n                <id>eth1/2</id>\n                <mode>edge</mode>\n                <bpduguard>enable</bpduguard>\n            </If-list>\n        </if-items> \n    </inst-items>\n</stp-items>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Configure Physical Trunk Interface & STP - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<intf-items>\n    <phys-items>\n        <PhysIf-list>\n            <id>eth1/2</id>\n            <layer>Layer2</layer>\n            <mode>trunk</mode>\n            <accessVlan>vlan-1</accessVlan>\n            <trunkVlans>20-30</trunkVlans>\n            <adminSt>up</adminSt>\n        </PhysIf-list>\n    </phys-items>\n</intf-items>\n<stp-items>\n    <inst-items>\n        <if-items>\n            <If-list>\n                <id>eth1/2</id>\n                <mode>trunk</mode>\n                <bpduguard>enable</bpduguard>\n            </If-list>\n        </if-items> \n    </inst-items>\n</stp-items>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Configured Physical Trunk Interface - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<PhysIf-list>\n    <id>eth1/3</id>\n    <layer>Layer2</layer>\n    <mode>trunk</mode>\n    <accessVlan>vlan-1</accessVlan>\n    <trunkVlans>20-30</trunkVlans>\n    <adminSt>up</adminSt>\n    <descr>Configured by Postman</descr>\n</PhysIf-list>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/intf-items/phys-items",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX Yang - Create VRF Context - XML Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/yang.data+xml"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/yang.data+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<inst-items>\n    <Inst-list>\n        <name>Tenant-A</name>\n        <dom-items>\n            <Dom-list>\n                <name>Tenant-A</name>\n                <rd>rd:unknown:0:0</rd>\n                <af-items>\n                    <DomAf-list>\n                        <type>ipv4-ucast</type>\n                        <ctrl-items>\n                            <AfCtrl-list>\n                                <type>ipv4-ucast</type>\n                                <rttp-items>\n                                <RttP-list>\n                                    <type>import</type>\n                                    <ent-items>\n                                        <RttEntry-list>\n                                            <rtt>route-target:unknown:0:0</rtt>\n                                        </RttEntry-list>\n                                    </ent-items>\n                                </RttP-list>\n                                <RttP-list>\n                                    <type>export</type>\n                                    <ent-items>\n                                        <RttEntry-list>\n                                            <rtt>route-target:unknown:0:0</rtt>\n                                        </RttEntry-list>\n                                    </ent-items>\n                                </RttP-list>\n                                </rttp-items>\n                            </AfCtrl-list>\n                        </ctrl-items>\n                    </DomAf-list>\n                </af-items>\n            </Dom-list>\n        </dom-items>\n    </Inst-list>\n</inst-items>"
+						},
+						"url": "https://{{nxipaddr}}/restconf/data/Cisco-NX-OS-device:System/",
+						"description": "Creats a Tenant Called Tenant-A\n==== \nvrf context Tenant-A\n  rd auto\n  address-family ipv4 unicast\n    route-target both auto"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "INS API Operations",
+			"description": "",
+			"item": [
+				{
+					"name": "NX API - Copy Run Start - JSON Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json-rpc"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-rpc"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"method\": \"cli_ascii\",\n    \"params\": {\n    \"cmd\": \"copy running-config startup-config\",\n    \"version\": 1\n    },\n    \"id\": 1\n}"
+						},
+						"url": "https://{{nxipaddr}}/ins",
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "NX API - Show Running Config for Humans - JSON Input",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{username}}",
+								"password": "{{password}}",
+								"showPassword": false
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json-rpc"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json-rpc"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"method\": \"cli_ascii\",\n    \"params\": {\n    \"cmd\": \"show running-config\",\n    \"version\": 1\n    },\n    \"id\": 1\n}"
+						},
+						"url": "https://{{nxipaddr}}/ins",
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
